@@ -89,7 +89,7 @@ const MainLayout = () => {
             >
                 <div style={{ height: 'var(--header-height)', display: 'flex', alignItems: 'center', justifyContent: 'center', borderBottom: '1px solid hsl(var(--border))', position: 'relative' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'hsl(var(--primary))', fontWeight: 'bold', fontSize: isSidebarOpen ? '1.25rem' : '0', overflow: 'hidden', whiteSpace: 'nowrap', transition: 'all 0.3s' }}>
-                        <img src="/logo.png" alt="Logo" style={{ width: '32px', height: '32px', objectFit: 'contain' }} onError={(e) => { e.target.onerror = null; e.target.src = 'https://via.placeholder.com/32?text=Log'; }} />
+                        <img src="/logo.jpg" alt="Logo" style={{ width: '32px', height: '32px', objectFit: 'contain' }} onError={(e) => { e.target.onerror = null; e.target.src = 'https://via.placeholder.com/32?text=Log'; }} />
                         <span className="logo-text" style={{ opacity: isSidebarOpen ? 1 : 0, width: isSidebarOpen ? 'auto' : 0 }}>Almighty Play School</span>
                     </div>
                     {/* Close button for mobile only */}
