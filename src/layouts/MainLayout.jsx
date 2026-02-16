@@ -194,7 +194,7 @@ const MainLayout = () => {
                         </button>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexShrink: 0 }}>
                             <div style={{ textAlign: 'right' }} className="admin-info">
-                                <div style={{ fontSize: '0.875rem', fontWeight: 600 }}>Admin User</div>
+                                <div style={{ fontSize: '0.875rem', fontWeight: 600 }}>Almighty User</div>
                                 <div style={{ fontSize: '0.75rem', color: 'hsl(var(--text-muted))' }}>Principal</div>
                             </div>
                             <div style={{ width: '40px', height: '40px', borderRadius: '50%', backgroundColor: 'hsl(var(--primary) / 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'hsl(var(--primary))' }}>
