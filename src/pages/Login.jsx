@@ -81,7 +81,7 @@ const Login = () => {
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
                                 required
-                                placeholder="admin@kidzone.com"
+                                placeholder="gaani02@gmail.com"
                                 style={{
                                     width: '100%',
                                     padding: '0.75rem 1rem 0.75rem 2.75rem',
