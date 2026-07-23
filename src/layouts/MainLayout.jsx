@@ -12,7 +12,8 @@ import {
     Bell,
     Search,
     UserCircle,
-    LogOut
+    LogOut,
+    BookOpen
 } from 'lucide-react';
 
 
@@ -51,6 +52,7 @@ const MainLayout = () => {
     const navItems = [
         { name: 'Dashboard', path: '/', icon: LayoutDashboard },
         { name: 'Students', path: '/students', icon: GraduationCap },
+        { name: 'Teachers', path: '/teachers', icon: BookOpen },
         { name: 'Staff', path: '/staff', icon: Users },
         { name: 'Fees', path: '/fees', icon: CreditCard },
         { name: 'Expenses', path: '/expenses', icon: Receipt },
@@ -89,7 +91,7 @@ const MainLayout = () => {
             >
                 <div style={{ height: 'var(--header-height)', display: 'flex', alignItems: 'center', justifyContent: 'center', borderBottom: '1px solid hsl(var(--border))', position: 'relative' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'hsl(var(--primary))', fontWeight: 'bold', fontSize: isSidebarOpen ? '1.25rem' : '0', overflow: 'hidden', whiteSpace: 'nowrap', transition: 'all 0.3s' }}>
-                        <img src="/logo.jpg" alt="Logo" style={{ width: '32px', height: '32px', objectFit: 'contain' }} onError={(e) => { e.target.onerror = null; e.target.src = 'https://via.placeholder.com/32?text=Log'; }} />
+                        <img src="/logo.png" alt="Logo" style={{ width: '32px', height: '32px', objectFit: 'contain' }} onError={(e) => { e.target.onerror = null; e.target.src = 'https://via.placeholder.com/32?text=Log'; }} />
                         <span className="logo-text" style={{ opacity: isSidebarOpen ? 1 : 0, width: isSidebarOpen ? 'auto' : 0 }}>Almighty Play School</span>
                     </div>
                     {/* Close button for mobile only */}
@@ -194,7 +196,7 @@ const MainLayout = () => {
                         </button>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexShrink: 0 }}>
                             <div style={{ textAlign: 'right' }} className="admin-info">
-                                <div style={{ fontSize: '0.875rem', fontWeight: 600 }}>Almighty User</div>
+                                <div style={{ fontSize: '0.875rem', fontWeight: 600 }}>Admin User</div>
                                 <div style={{ fontSize: '0.75rem', color: 'hsl(var(--text-muted))' }}>Principal</div>
                             </div>
                             <div style={{ width: '40px', height: '40px', borderRadius: '50%', backgroundColor: 'hsl(var(--primary) / 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'hsl(var(--primary))' }}>
