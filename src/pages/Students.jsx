@@ -213,11 +213,11 @@ const Students = () => {
                                         style={{ padding: '0.5rem', borderRadius: '0.375rem', border: '1px solid hsl(var(--border))', outline: 'none' }}
                                     >
                                         <option value="">Select Class</option>
-                                        <option value="Pre-KG">Pre-Nursery</option>
-                                        <option value="LKG">Nursery</option>
-                                        <option value="UKG">Kindergarten</option>
-                                        <option value="UKG">I-Standard</option>
-                                        <option value="UKG">II-Standard</option>
+                                        <option value="Pre-KG">Pre-KG</option>
+                                        <option value="LKG">LKG</option>
+                                        <option value="UKG">UKG</option>
+                                        <option value="I-Standard">I-Standard</option>
+                                        <option value="II-Standard">II-Standard</option>
                                     </select>
                                 </div>
 
