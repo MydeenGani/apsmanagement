@@ -3,14 +3,14 @@ import { Plus, DollarSign, PieChart, ArrowUpRight, ArrowDownRight, Edit, Trash, 
 import { useApp } from '../context/AppContext';
 
 const Expenses = () => {
-    const { expenses, addExpense, updateExpense, deleteExpense } = useApp();
+    const { expenses, addExpense, updateExpense, deleteExpense, stats } = useApp();
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [currentExpense, setCurrentExpense] = useState({ id: null, title: '', category: '', amount: '', date: '' });
 
     // Calculate totals for summary cards
     const totalExpenses = expenses.reduce((sum, item) => sum + item.amount, 0);
     // Mock budget
-    const budget = 141000;
+    const budget = stats.totalFeesCollected || 0;
     const remaining = budget - totalExpenses;
 
     const handleAdd = () => {
