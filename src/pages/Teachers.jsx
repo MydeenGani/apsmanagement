@@ -1,226 +1,125 @@
 import React, { useState } from 'react';
-import { Search, Plus, Filter, Phone, Mail, BookOpen, Edit, Trash, X } from 'lucide-react';
+import { Plus, Edit, Trash } from 'lucide-react';
 import { useApp } from '../context/AppContext';
-
-const Teachers = () => {
-    const { teachers, addTeacher, updateTeacher, deleteTeacher, seedDatabase } = useApp();
-
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [currentTeacher, setCurrentTeacher] = useState({ id: null, name: '', subject: '', email: '', phone: '', status: 'Active' });
-
-    const handleAdd = () => {
-        setCurrentTeacher({ id: null, name: '', subject: '', email: '', phone: '', status: 'Active' });
-        setIsModalOpen(true);
-    };
-
-    const handleEdit = (teacher) => {
-        setCurrentTeacher(teacher);
-        setIsModalOpen(true);
-    };
-
-    const handleDelete = async (id) => {
-        if (window.confirm('Are you sure you want to delete this teacher?')) {
-            await deleteTeacher(id);
-        }
-    };
-
-    const closeModal = () => {
-        setIsModalOpen(false);
-    };
-
-    const handleSave = async (e) => {
-        e.preventDefault();
-        try {
-            if (currentTeacher.id) {
-                await updateTeacher(currentTeacher.id, currentTeacher);
-            } else {
-                await addTeacher(currentTeacher);
-            }
-            closeModal();
-        } catch (error) {
-            console.error("Failed to save teacher", error);
-        }
-    };
-
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setCurrentTeacher(prev => ({ ...prev, [name]: value }));
-    };
-
-    return (
-        <div className="fade-in">
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
-                <div>
-                    <h2 style={{ marginBottom: '0.5rem' }}>Teachers</h2>
-                    <p style={{ color: 'hsl(var(--text-muted))' }}>Manage teaching staff and assignments.</p>
-                </div>
-                <button className="btn btn-primary" onClick={handleAdd}>
-                    <Plus size={18} />
-                    Add Teacher
-                </button>
-            </div>
-            {teachers.length === 0 ? (
-                <div style={{ textAlign: 'center', marginTop: '2rem' }}>
-                    <p style={{ color: 'hsl(var(--text-muted))', fontStyle: 'italic' }}>
-                        No teachers found. Click “Add Teacher” to create one, or seed sample data.
-                    </p>
-                    <button className="btn btn-outline" onClick={seedDatabase} style={{ marginTop: '1rem' }}>
-                        Seed Sample Data
-                    </button>
-                </div>
-            ) : null}
-
-            {teachers.length > 0 && (
-                <div className="dashboard-grid">
-                    {teachers.map((teacher) => (
-                        <div key={teacher.id} className="card" style={{ display: 'flex', flexDirection: 'column', gap: '1rem', position: 'relative' }}>
-                            <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between' }}>
-                                <div style={{ display: 'flex', gap: '1rem' }}>
-                                    <div style={{ width: '48px', height: '48px', borderRadius: '50%', backgroundColor: 'hsl(var(--secondary) / 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'hsl(var(--secondary))', fontWeight: 600, fontSize: '1.25rem' }}>
-                                        {teacher.name?.charAt(0) || 'T'}
-                                    </div>
-                                    <div>
-                                        <h3 style={{ fontSize: '1rem', marginBottom: '0.25rem' }}>{teacher.name}</h3>
-                                        <div style={{ fontSize: '0.875rem', color: 'hsl(var(--text-muted))', display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
-                                            <BookOpen size={14} />
-                                            {teacher.subject}
-                                        </div>
-                                    </div>
-                                </div>
-                                <span style={{
-                                    padding: '0.25rem 0.5rem',
-                                    borderRadius: 'var(--radius)',
-                                    fontSize: '0.75rem',
-                                    backgroundColor: teacher.status === 'Active' ? 'hsl(var(--accent) / 0.1)' : 'hsl(var(--secondary) / 0.1)',
-                                    color: teacher.status === 'Active' ? 'hsl(var(--accent))' : 'hsl(var(--secondary))'
-                                }}>
-                                    {teacher.status}
-                                </span>
-                            </div>
-
-                            <div style={{ borderTop: '1px solid hsl(var(--border))', paddingTop: '1rem', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.875rem', color: 'hsl(var(--text-secondary))' }}>
-                                    <Mail size={16} />
-                                    {teacher.email}
-                                </div>
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.875rem', color: 'hsl(var(--text-secondary))' }}>
-                                    <Phone size={16} />
-                                    {teacher.phone}
-                                </div>
-                            </div>
-
-                            <div style={{ display: 'flex', gap: '0.5rem', marginTop: 'auto', paddingTop: '1rem', borderTop: '1px solid hsl(var(--border))' }}>
-                                <button
-                                    onClick={() => handleEdit(teacher)}
-                                    className="btn btn-outline"
-                                    style={{ flex: 1, height: '2rem', fontSize: '0.875rem' }}
-                                >
-                                    <Edit size={14} style={{ marginRight: '0.5rem' }} /> Edit
-                                </button>
-                                <button
-                                    onClick={() => handleDelete(teacher.id)}
-                                    className="btn btn-outline"
-                                    style={{ flex: 1, height: '2rem', fontSize: '0.875rem', color: 'hsl(var(--destructive))', borderColor: 'hsl(var(--destructive) / 0.3)' }}
-                                >
-                                    <Trash size={14} style={{ marginRight: '0.5rem' }} /> Delete
-                                </button>
-                            </div>
-                        </div>
-                    ))}
-                </div>
-            )}
-
-            {/* Add/Edit Modal */}
-            {isModalOpen && (
-                <div style={{
-                    position: 'fixed',
-                    top: 0,
-                    left: 0,
-                    right: 0,
-                    bottom: 0,
-                    backgroundColor: 'rgba(0,0,0,0.5)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    zIndex: 100
-                }}>
-                    <div className="card fade-in" style={{ width: '100%', maxWidth: '500px', padding: '0', overflow: 'hidden' }}>
-                        <div style={{ padding: '1.5rem', borderBottom: '1px solid hsl(var(--border))', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                            <h3 style={{ margin: 0 }}>{currentTeacher.id ? 'Edit Teacher' : 'Add Teacher'}</h3>
-                            <button onClick={closeModal} style={{ background: 'none', border: 'none', cursor: 'pointer' }}><X size={20} /></button>
-                        </div>
-
-                        <form onSubmit={handleSave} style={{ padding: '1.5rem' }}>
-                            <div style={{ display: 'grid', gap: '1rem' }}>
-                                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-                                    <label style={{ fontSize: '0.875rem', fontWeight: 500 }}>Full Name</label>
-                                    <input
-                                        type="text"
-                                        name="name"
-                                        value={currentTeacher.name}
-                                        onChange={handleChange}
-                                        required
-                                        style={{ padding: '0.5rem', borderRadius: '0.375rem', border: '1px solid hsl(var(--border))', outline: 'none' }}
-                                    />
-                                </div>
-
-                                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-                                    <label style={{ fontSize: '0.875rem', fontWeight: 500 }}>Subject</label>
-                                    <input
-                                        type="text"
-                                        name="subject"
-                                        value={currentTeacher.subject}
-                                        onChange={handleChange}
-                                        style={{ padding: '0.5rem', borderRadius: '0.375rem', border: '1px solid hsl(var(--border))', outline: 'none' }}
-                                    />
-                                </div>
-
-                                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-                                    <label style={{ fontSize: '0.875rem', fontWeight: 500 }}>Email</label>
-                                    <input
-                                        type="email"
-                                        name="email"
-                                        value={currentTeacher.email}
-                                        onChange={handleChange}
-                                        style={{ padding: '0.5rem', borderRadius: '0.375rem', border: '1px solid hsl(var(--border))', outline: 'none' }}
-                                    />
-                                </div>
-
-                                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-                                    <label style={{ fontSize: '0.875rem', fontWeight: 500 }}>Phone Number</label>
-                                    <input
-                                        type="text"
-                                        name="phone"
-                                        value={currentTeacher.phone}
-                                        onChange={handleChange}
-                                        style={{ padding: '0.5rem', borderRadius: '0.375rem', border: '1px solid hsl(var(--border))', outline: 'none' }}
-                                    />
-                                </div>
-
-                                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-                                    <label style={{ fontSize: '0.875rem', fontWeight: 500 }}>Status</label>
-                                    <select
-                                        name="status"
-                                        value={currentTeacher.status}
-                                        onChange={handleChange}
-                                        style={{ padding: '0.5rem', borderRadius: '0.375rem', border: '1px solid hsl(var(--border))', outline: 'none' }}
-                                    >
-                                        <option value="Active">Active</option>
-                                        <option value="On Leave">On Leave</option>
-                                    </select>
-                                </div>
-                            </div>
-
-                            <div style={{ marginTop: '1.5rem', display: 'flex', justifyContent: 'flex-end', gap: '0.75rem' }}>
-                                <button type="button" onClick={closeModal} className="btn btn-outline">Cancel</button>
-                                <button type="submit" className="btn btn-primary">{currentTeacher.id ? 'Save Changes' : 'Add Teacher'}</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            )}
-        </div>
-    );
+// Simple modal – replace with UI library if desired
+const Modal = ({ isOpen, onClose, children }) => {
+  if (!isOpen) return null;
+  return (
+    <div className="fixed inset-0 flex items-center justify-center bg-black/30 backdrop-blur-sm" onClick={onClose}>
+      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 w-full max-w-md" onClick={e => e.stopPropagation()}>
+        {children}
+      </div>
+    </div>
+  );
 };
-
+const Teachers = () => {
+  const { teachers, addTeacher, updateTeacher, deleteTeacher } = useApp();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [currentTeacher, setCurrentTeacher] = useState({
+    id: null,
+    name: '',
+    subject: '',
+    email: '',
+    phone: '',
+    status: 'Active',
+  });
+  const openAdd = () => {
+    setCurrentTeacher({ id: null, name: '', subject: '', email: '', phone: '', status: 'Active' });
+    setIsModalOpen(true);
+  };
+  const openEdit = teacher => {
+    setCurrentTeacher(teacher);
+    setIsModalOpen(true);
+  };
+  const confirmDelete = async id => {
+    if (window.confirm('Delete this teacher?')) {
+      await deleteTeacher(id);
+    }
+  };
+  const close = () => setIsModalOpen(false);
+  const handleChange = e => {
+    const { name, value } = e.target;
+    setCurrentTeacher(prev => ({ ...prev, [name]: value }));
+  };
+  const handleSave = async e => {
+    e.preventDefault();
+    try {
+      if (currentTeacher.id) {
+        await updateTeacher(currentTeacher.id, currentTeacher);
+      } else {
+        await addTeacher(currentTeacher);
+      }
+      close();
+    } catch (err) {
+      console.error('Save teacher failed', err);
+    }
+  };
+  return (
+    <div className="p-6 fade-in">
+      {/* Header */}
+      <div className="flex justify-between items-center mb-8">
+        <h2 className="text-2xl font-bold">Teachers</h2>
+        <button className="btn btn-primary flex items-center gap-2" onClick={openAdd}>
+          <Plus size={18} /> Add Teacher
+        </button>
+      </div>
+      {/* Content */}
+      {teachers.length === 0 ? (
+        <p className="text-gray-500">No teachers yet. Click “Add Teacher” to begin.</p>
+      ) : (
+        <div className="overflow-x-auto rounded border">
+          <table className="min-w-full text-left">
+            <thead className="bg-gray-100 dark:bg-gray-800">
+              <tr>
+                <th className="p-3">Name</th>
+                <th className="p-3">Subject</th>
+                <th className="p-3">Email</th>
+                <th className="p-3">Phone</th>
+                <th className="p-3">Status</th>
+                <th className="p-3">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {teachers.map(t => (
+                <tr key={t.id} className="border-b">
+                  <td className="p-3">{t.name}</td>
+                  <td className="p-3">{t.subject}</td>
+                  <td className="p-3">{t.email}</td>
+                  <td className="p-3">{t.phone}</td>
+                  <td className="p-3">{t.status}</td>
+                  <td className="p-3 flex gap-2">
+                    <button onClick={() => openEdit(t)} title="Edit" className="text-blue-600">
+                      <Edit size={16} />
+                    </button>
+                    <button onClick={() => confirmDelete(t.id)} title="Delete" className="text-red-600">
+                      <Trash size={16} />
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
+      {/* Modal for Add / Edit */}
+      <Modal isOpen={isModalOpen} onClose={close}>
+        <h3 className="text-xl font-semibold mb-4">{currentTeacher.id ? 'Edit Teacher' : 'Add Teacher'}</h3>
+        <form onSubmit={handleSave} className="space-y-4">
+          <input name="name" placeholder="Name" value={currentTeacher.name} onChange={handleChange} required className="input w-full" />
+          <input name="subject" placeholder="Subject" value={currentTeacher.subject} onChange={handleChange} required className="input w-full" />
+          <input name="email" type="email" placeholder="Email" value={currentTeacher.email} onChange={handleChange} required className="input w-full" />
+          <input name="phone" placeholder="Phone" value={currentTeacher.phone} onChange={handleChange} className="input w-full" />
+          <select name="status" value={currentTeacher.status} onChange={handleChange} className="input w-full">
+            <option value="Active">Active</option>
+            <option value="Inactive">Inactive</option>
+          </select>
+          <div className="flex justify-end gap-2 mt-4">
+            <button type="button" className="btn" onClick={close}>Cancel</button>
+            <button type="submit" className="btn btn-primary">Save</button>
+          </div>
+        </form>
+      </Modal>
+    </div>
+  );
+};
 export default Teachers;
