@@ -3,7 +3,7 @@ import { Search, Plus, Filter, Phone, Mail, BookOpen, Edit, Trash, X } from 'luc
 import { useApp } from '../context/AppContext';
 
 const Teachers = () => {
-    const { teachers, addTeacher, updateTeacher, deleteTeacher } = useApp();
+    const { teachers, addTeacher, updateTeacher, deleteTeacher, seedDatabase } = useApp();
 
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [currentTeacher, setCurrentTeacher] = useState({ id: null, name: '', subject: '', email: '', phone: '', status: 'Active' });
@@ -59,64 +59,76 @@ const Teachers = () => {
                     Add Teacher
                 </button>
             </div>
+            {teachers.length === 0 ? (
+                <div style={{ textAlign: 'center', marginTop: '2rem' }}>
+                    <p style={{ color: 'hsl(var(--text-muted))', fontStyle: 'italic' }}>
+                        No teachers found. Click “Add Teacher” to create one, or seed sample data.
+                    </p>
+                    <button className="btn btn-outline" onClick={seedDatabase} style={{ marginTop: '1rem' }}>
+                        Seed Sample Data
+                    </button>
+                </div>
+            ) : null}
 
-            <div className="dashboard-grid">
-                {teachers.map((teacher) => (
-                    <div key={teacher.id} className="card" style={{ display: 'flex', flexDirection: 'column', gap: '1rem', position: 'relative' }}>
-                        <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between' }}>
-                            <div style={{ display: 'flex', gap: '1rem' }}>
-                                <div style={{ width: '48px', height: '48px', borderRadius: '50%', backgroundColor: 'hsl(var(--secondary) / 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'hsl(var(--secondary))', fontWeight: 600, fontSize: '1.25rem' }}>
-                                    {teacher.name.charAt(4)}
-                                </div>
-                                <div>
-                                    <h3 style={{ fontSize: '1rem', marginBottom: '0.25rem' }}>{teacher.name}</h3>
-                                    <div style={{ fontSize: '0.875rem', color: 'hsl(var(--text-muted))', display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
-                                        <BookOpen size={14} />
-                                        {teacher.subject}
+            {teachers.length > 0 && (
+                <div className="dashboard-grid">
+                    {teachers.map((teacher) => (
+                        <div key={teacher.id} className="card" style={{ display: 'flex', flexDirection: 'column', gap: '1rem', position: 'relative' }}>
+                            <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between' }}>
+                                <div style={{ display: 'flex', gap: '1rem' }}>
+                                    <div style={{ width: '48px', height: '48px', borderRadius: '50%', backgroundColor: 'hsl(var(--secondary) / 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'hsl(var(--secondary))', fontWeight: 600, fontSize: '1.25rem' }}>
+                                        {teacher.name?.charAt(0) || 'T'}
+                                    </div>
+                                    <div>
+                                        <h3 style={{ fontSize: '1rem', marginBottom: '0.25rem' }}>{teacher.name}</h3>
+                                        <div style={{ fontSize: '0.875rem', color: 'hsl(var(--text-muted))', display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
+                                            <BookOpen size={14} />
+                                            {teacher.subject}
+                                        </div>
                                     </div>
                                 </div>
+                                <span style={{
+                                    padding: '0.25rem 0.5rem',
+                                    borderRadius: 'var(--radius)',
+                                    fontSize: '0.75rem',
+                                    backgroundColor: teacher.status === 'Active' ? 'hsl(var(--accent) / 0.1)' : 'hsl(var(--secondary) / 0.1)',
+                                    color: teacher.status === 'Active' ? 'hsl(var(--accent))' : 'hsl(var(--secondary))'
+                                }}>
+                                    {teacher.status}
+                                </span>
                             </div>
-                            <span style={{
-                                padding: '0.25rem 0.5rem',
-                                borderRadius: 'var(--radius)',
-                                fontSize: '0.75rem',
-                                backgroundColor: teacher.status === 'Active' ? 'hsl(var(--accent) / 0.1)' : 'hsl(var(--secondary) / 0.1)',
-                                color: teacher.status === 'Active' ? 'hsl(var(--accent))' : 'hsl(var(--secondary))'
-                            }}>
-                                {teacher.status}
-                            </span>
-                        </div>
 
-                        <div style={{ borderTop: '1px solid hsl(var(--border))', paddingTop: '1rem', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.875rem', color: 'hsl(var(--text-secondary))' }}>
-                                <Mail size={16} />
-                                {teacher.email}
+                            <div style={{ borderTop: '1px solid hsl(var(--border))', paddingTop: '1rem', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.875rem', color: 'hsl(var(--text-secondary))' }}>
+                                    <Mail size={16} />
+                                    {teacher.email}
+                                </div>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.875rem', color: 'hsl(var(--text-secondary))' }}>
+                                    <Phone size={16} />
+                                    {teacher.phone}
+                                </div>
                             </div>
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.875rem', color: 'hsl(var(--text-secondary))' }}>
-                                <Phone size={16} />
-                                {teacher.phone}
-                            </div>
-                        </div>
 
-                        <div style={{ display: 'flex', gap: '0.5rem', marginTop: 'auto', paddingTop: '1rem', borderTop: '1px solid hsl(var(--border))' }}>
-                            <button
-                                onClick={() => handleEdit(teacher)}
-                                className="btn btn-outline"
-                                style={{ flex: 1, height: '2rem', fontSize: '0.875rem' }}
-                            >
-                                <Edit size={14} style={{ marginRight: '0.5rem' }} /> Edit
-                            </button>
-                            <button
-                                onClick={() => handleDelete(teacher.id)}
-                                className="btn btn-outline"
-                                style={{ flex: 1, height: '2rem', fontSize: '0.875rem', color: 'hsl(var(--destructive))', borderColor: 'hsl(var(--destructive) / 0.3)' }}
-                            >
-                                <Trash size={14} style={{ marginRight: '0.5rem' }} /> Delete
-                            </button>
+                            <div style={{ display: 'flex', gap: '0.5rem', marginTop: 'auto', paddingTop: '1rem', borderTop: '1px solid hsl(var(--border))' }}>
+                                <button
+                                    onClick={() => handleEdit(teacher)}
+                                    className="btn btn-outline"
+                                    style={{ flex: 1, height: '2rem', fontSize: '0.875rem' }}
+                                >
+                                    <Edit size={14} style={{ marginRight: '0.5rem' }} /> Edit
+                                </button>
+                                <button
+                                    onClick={() => handleDelete(teacher.id)}
+                                    className="btn btn-outline"
+                                    style={{ flex: 1, height: '2rem', fontSize: '0.875rem', color: 'hsl(var(--destructive))', borderColor: 'hsl(var(--destructive) / 0.3)' }}
+                                >
+                                    <Trash size={14} style={{ marginRight: '0.5rem' }} /> Delete
+                                </button>
+                            </div>
                         </div>
-                    </div>
-                ))}
-            </div>
+                    ))}
+                </div>
+            )}
 
             {/* Add/Edit Modal */}
             {isModalOpen && (
