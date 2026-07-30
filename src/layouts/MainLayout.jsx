@@ -52,7 +52,7 @@ const MainLayout = () => {
     const navItems = [
         { name: 'Dashboard', path: '/', icon: LayoutDashboard },
         { name: 'Students', path: '/students', icon: GraduationCap },
-        { name: 'Teachers', path: '/teachers', icon: BookOpen },
+        //{ name: 'Teachers', path: '/teachers', icon: BookOpen },
         { name: 'Staff', path: '/staff', icon: Users },
         { name: 'Fees', path: '/fees', icon: CreditCard },
         { name: 'Expenses', path: '/expenses', icon: Receipt },
