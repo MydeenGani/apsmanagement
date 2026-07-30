@@ -13,7 +13,12 @@ const Modal = ({ isOpen, onClose, children }) => {
   );
 };
 const Teachers = () => {
-  const { teachers, addTeacher, updateTeacher, deleteTeacher } = useApp();
+  const {
+  teachers = [],
+  addTeacher,
+  updateTeacher,
+  deleteTeacher,
+} = useApp();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentTeacher, setCurrentTeacher] = useState({
     id: null,
